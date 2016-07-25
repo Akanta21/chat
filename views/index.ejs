@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Real time chat app</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<body class="col-md-12">
+  <h1>Realtime chat app</h1>
+  <div>
+    <div class="col-md-4"></div>
+    <form class="col-md-4">
+      <div class="form-group">
+        <label for="exampleInputName">Name</label>
+        <input type="name" class="form-control" id="exampleInputName" placeholder="Name">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputMessage">Message</label>
+        <textarea type="message" class="form-control" id="exampleInputMessage" placeholder="Message" rows="3"></textarea>
+      </div>
+      <button type="send" class="btn btn-default">Send</button>
+    </form>
+    <div class="col-md-4"></div>
+  </div>
+  <div id='messages'>
+    <h2>Chat board</h2>
+    <div id="chats">
+    </div>
+  </div>
+  <script>
+  var socket = io()
+
+  $('form').submit(function() {
+    socket.emit('user', $('#exampleInputName').val())
+    socket.emit('chat message', $('#exampleInputMessage').val())
+    $('#exampleInputName').val('')
+    $('#exampleInputMessage').val('')
+    return false
+  })
+  socket.on('user', function(name) {
+    $('#chats').append($('<h2>').text(name))
+  })
+  socket.on('chat message', function(msg) {
+    $('#chats').append($('<p>').text(msg))
+  })
+  </script>
+</body>
+</html>
