@@ -5,46 +5,106 @@
   <title>Real time chat app</title>
   <script src="/socket.io/socket.io.js"></script>
   <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font: 13px Helvetica, Arial;
+    background:black;
+    color:white;
+  }
+  header{
+    padding-left: 100px;
+  }
+  form {
+    background: transparent;
+    padding: 3px;
+    font-size: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    color: #fff;
+  }
+  .form-horizontal .control-label {
+    /* text-align:right; */ text-align:left;
+    padding-left: 30px;
+  }
+  form input {
+    border: 0;
+    padding: 10px;
+    width: 90%;
+    margin-right: .5%;
+    align-items: left;
+  }
+  form button {
+    width: 9%;
+    background: rgb(130, 224, 255);
+    border: none;
+    padding: 30px;
+    margin-left: 85px;
+  }
+  #messages {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  #messages li {
+    padding: 5px 10px;
+  }
+  #messages li:nth-child(odd) {
+    /*background: #eee;*/
+    color: white;
+    margin-top: 10px
+  }
+  #messages li:nth-child(even) {
+    /*background: #eee;*/
+    color: #16C9C9;
+    margin-top: 10px
+  }
+  </style>
 </head>
 <body class="col-md-12">
-  <h1>Realtime chat app</h1>
-  <div>
-    <div class="col-md-4"></div>
-    <form class="col-md-4">
-      <div class="form-group">
-        <label for="exampleInputName">Name</label>
+  <header class="fixed-top">
+    <h1>Realtime chat app</h1>
+    <div id='messages'>
+      <p>Chat Messages</p>
+      <div id='chats'
+      <!-- where the chat goes -->
+    </div>
+  </header>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label for="exampleInputName" class="col-sm-1 control label">Name</label>
+      <div class="col-sm-9">
         <input type="name" class="form-control" id="exampleInputName" placeholder="Name">
       </div>
-      <div class="form-group">
-        <label for="exampleInputMessage">Message</label>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputMessage" class="col-sm-1 control label">Message</label>
+      <div class="col-sm-9">
         <textarea type="message" class="form-control" id="exampleInputMessage" placeholder="Message" rows="3"></textarea>
       </div>
-      <button type="send" class="btn btn-default">Send</button>
-    </form>
-    <div class="col-md-4"></div>
-  </div>
-  <div id='messages'>
-    <h2>Chat board</h2>
-    <div id="chats">
     </div>
-  </div>
-  <script>
-  var socket = io()
+    <button type="send" class="btn btn-default">Send</button>
+  </form>
+</div>
+<script>
+var socket = io()
 
-  $('form').submit(function() {
-    socket.emit('user', $('#exampleInputName').val())
-    socket.emit('chat message', $('#exampleInputMessage').val())
-    $('#exampleInputName').val('')
-    $('#exampleInputMessage').val('')
-    return false
-  })
-  socket.on('user', function(name) {
-    $('#chats').append($('<h2>').text(name))
-  })
-  socket.on('chat message', function(msg) {
-    $('#chats').append($('<p>').text(msg))
-  })
-  </script>
+$('form').submit(function() {
+  socket.emit('chat message', "<h3>" + $('#exampleInputName').val() + "</h3><br />" + $('#exampleInputMessage').val())
+  $('#exampleInputName').val('')
+  $('#exampleInputMessage').val('')
+  return false
+})
+socket.on('chat message', function(msg) {
+  $('#chats').append($('<li>').html(msg))
+})
+</script>
 </body>
 </html>

@@ -10,14 +10,10 @@ app.get('/', (req, res) => {
   res.render('index.ejs')
 })
 io.on('connection', function (socket) {
-  // console.log('a user is connected')
+  console.log('a user is connected', socket.id)
   socket.on('chat message', function (msg) {
-    // console.log('message: ' + msg)
+    console.log('message: ' + msg)
     io.emit('chat message', msg)
-  })
-  socket.on('user', function (name) {
-    console.log('user: ' + name)
-    io.emit('user', name)
   })
 })
 server.listen(3000, function () {
